@@ -23,6 +23,7 @@ def main():
     # 爆弾rectの中心座標を乱数で指定する
     clock = pg.time.Clock()
     tmr = 0
+    vx, vy = +5, +5
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -30,7 +31,8 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
-        screen.blit(bd_img, bd_rect)
+        screen.blit(bd_img, bd_rect)  # 練習2
+        bd_rect.move_ip(vx, vy)
         pg.display.update()
         tmr += 1
         
