@@ -47,6 +47,16 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     vx, vy = +5, +5
+    kk_rdct = {
+        (5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
+        (5,-5):pg.transform.rotozoom(kk_img, 315, 1.0),
+        (0,-5):pg.transform.rotozoom(kk_img, 270, 1.0),
+        (-5,-5):pg.transform.rotozoom(kk_img, 315, 1.0),
+        (-5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
+        (-5,5):pg.transform.rotozoom(kk_img, 45, 1.0),
+        (0,5):pg.transform.rotozoom(kk_img, 90, 1.0),
+        (5,5):pg.transform.rotozoom(kk_img, 45, 1.0),
+    }
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -66,6 +76,14 @@ def main():
         kk_rect.move_ip(sum_mv[0], sum_mv[1])
         if in_Judge(kk_rect) != (True, True):
             kk_rect.move_ip(-sum_mv[0], -sum_mv[1])
+            
+        if(sum_mv[0] >= 5):
+            kk_img = pg.transform.flip(kk_img, False, True)
+        if sum_mv != [0, 0]:
+            kk_img = kk_rdct[tuple(sum_mv)]
+            if sum_mv[0] >= 5:
+                kk_img = pg.transform.flip(kk_img, True, False)
+            
         
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect)  
