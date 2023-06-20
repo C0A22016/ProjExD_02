@@ -10,6 +10,7 @@ key_dct = {
     pg.K_LEFT:(-5,0),
     pg.K_RIGHT:(+5,0)
     }
+accs = [a for a in range(1, 11)]
 
 
 def in_Judge(r): 
@@ -47,7 +48,7 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     vx, vy = +5, +5
-    kk_rdct = {
+    kk_rdct = {  
         (5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
         (5,-5):pg.transform.rotozoom(kk_img, 315, 1.0),
         (0,-5):pg.transform.rotozoom(kk_img, 270, 1.0),
@@ -57,6 +58,14 @@ def main():
         (0,5):pg.transform.rotozoom(kk_img, 90, 1.0),
         (5,5):pg.transform.rotozoom(kk_img, 45, 1.0),
     }
+    
+    bd_imgs = []
+    for r in range(1, 11):
+        bd_img = pg.Surface((20*r, 20*r))
+        bd_img.set_colorkey((0, 0, 0))
+        pg.draw.circle(bd_img, (225, 0, 0), (10*r, 10*r), 10*r)
+        bd_imgs.append(bd_img)
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -68,7 +77,8 @@ def main():
         
         key_lst = pg.key.get_pressed()  # 練習3
         sum_mv = [0, 0]
-        past_rect = kk_rect
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+        bd_img = bd_imgs[min(tmr//500, 9)]
         for k ,v in key_dct.items():
             if key_lst[k]:
                  sum_mv[0] += v[0]
@@ -79,15 +89,14 @@ def main():
             
         if(sum_mv[0] >= 5):
             kk_img = pg.transform.flip(kk_img, False, True)
-        if sum_mv != [0, 0]:
+        if sum_mv != [0, 0]:  #演習1
             kk_img = kk_rdct[tuple(sum_mv)]
             if sum_mv[0] >= 5:
                 kk_img = pg.transform.flip(kk_img, True, False)
-            
         
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect)  
-        bd_rect.move_ip(vx, vy)  # 練習2
+        bd_rect.move_ip(avx, avy)  # 練習2
         bd_x, bd_y = in_Judge(bd_rect)
         if not bd_x:
             vx *= -1
@@ -97,7 +106,8 @@ def main():
         pg.display.update()
         tmr += 1
         
-        
+
+            
         clock.tick(50)
 
 
