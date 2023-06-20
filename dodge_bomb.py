@@ -4,13 +4,13 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
-key_dct = {
+key_dct = {  # 移動keyの辞書
     pg.K_UP:(0,-5),
     pg.K_DOWN: (0,+5),
     pg.K_LEFT:(-5,0),
     pg.K_RIGHT:(+5,0)
     }
-accs = [a for a in range(1, 11)]
+accs = [a for a in range(1, 11)]  # 10段階の加速のリスト　
 
 
 def in_Judge(r): 
@@ -50,7 +50,7 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     vx, vy = +5, +5
-    kk_rdct = {  
+    kk_rdct = {  # 移動方向に合わせたこんかとんの向きの辞書 
         (5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
         (5,-5):pg.transform.rotozoom(kk_img, 315, 1.0),
         (0,-5):pg.transform.rotozoom(kk_img, 270, 1.0),
@@ -61,13 +61,13 @@ def main():
         (5,5):pg.transform.rotozoom(kk_img, 45, 1.0),
     }
     
-    bd_imgs = []
-    for r in range(1, 11):
+    bd_imgs = []  # 爆弾の10段階の大きさを保存するリスト
+    for r in range(1, 11):  # bd_imgsに段階別の大きさのbd_imgを保存
         bd_img = pg.Surface((20*r, 20*r))
         bd_img.set_colorkey((0, 0, 0))
         pg.draw.circle(bd_img, (225, 0, 0), (10*r, 10*r), 10*r)
         bd_imgs.append(bd_img)
-    goFlag = False
+    goFlag = False  # ゲームオーバーの判定のフラグ
     
     while True:
         for event in pg.event.get():
@@ -76,16 +76,15 @@ def main():
             
         if kk_rect.colliderect(bd_rect):
             print("ゲームオーバー")
-            vx, vy = 0, 0
-            kk_img = kkgo_img
-            goFlag = True
-            if(tmr - past_tmr >= 150):
-                return
-            
-        else:
+            vx, vy = 0, 0  # 爆弾の動きを停止 
+            kk_img = kkgo_img  # こうかとんの画像を変更
+            goFlag = True  
+            if(tmr - past_tmr >= 150):  # ゲームオーバーから150フレーム経ったら終了
+                return  
+        else:  # プレイ中はpast_tmrを更新
             past_tmr = tmr
             
-        if not goFlag:
+        if not goFlag:  # ゲームオーバーではなかったら操作可能
             key_lst = pg.key.get_pressed()  # 練習3
         sum_mv = [0, 0]
         avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]  # 演習2
