@@ -32,6 +32,8 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+    kkgo_img = pg.image.load("ex02/fig/8.png")
+    kkgo_img = pg.transform.rotozoom(kkgo_img, 0, 2.0) 
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rect = kk_img.get_rect()
     kk_rect.center = 900, 400
@@ -65,6 +67,7 @@ def main():
         bd_img.set_colorkey((0, 0, 0))
         pg.draw.circle(bd_img, (225, 0, 0), (10*r, 10*r), 10*r)
         bd_imgs.append(bd_img)
+    goFlag = False
     
     while True:
         for event in pg.event.get():
@@ -73,11 +76,19 @@ def main():
             
         if kk_rect.colliderect(bd_rect):
             print("ゲームオーバー")
-            return 
-        
-        key_lst = pg.key.get_pressed()  # 練習3
+            vx, vy = 0, 0
+            kk_img = kkgo_img
+            goFlag = True
+            if(tmr - past_tmr >= 150):
+                return
+            
+        else:
+            past_tmr = tmr
+            
+        if not goFlag:
+            key_lst = pg.key.get_pressed()  # 練習3
         sum_mv = [0, 0]
-        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]  # 演習2
         bd_img = bd_imgs[min(tmr//500, 9)]
         for k ,v in key_dct.items():
             if key_lst[k]:
